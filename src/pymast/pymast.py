@@ -7,7 +7,9 @@ from typing import Optional, Union
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 
 from sklearn.base import BaseEstimator
-from sklearn.linear_model import LinearRegression, LogisticRegression
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression, LogisticRegression, Ridge
 
 class HurdleLogNormal(BaseEstimator):
     """Thank you https://geoffruddock.com/building-a-hurdle-regression-estimator-in-scikit-learn/ for holding my hand through this process."""
@@ -38,7 +40,7 @@ class HurdleLogNormal(BaseEstimator):
         # Hurdle Component
         self.logistic.fit(X, y > 0)
         # Linear Component
-        self.linear.fit(X, y[y > 0])
+        self.linear.fit(X[y > 0], y[y > 0])
 
         # Done
         self.is_fitted_ = True
